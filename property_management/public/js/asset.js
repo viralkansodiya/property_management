@@ -283,7 +283,6 @@ frappe.ui.form.on('Asset', {
 
 frappe.ui.form.on('Asset', {
     refresh(frm) {
-        console.log("Test ::::::::::::::::::::::")
         frm.set_df_property('depreciation_schedule_sb', 'hide', 1)
         frm.add_custom_button(__("Available"), function() {
             frm.set_value('property_status', "Available");
@@ -313,7 +312,16 @@ frappe.ui.form.on('Asset', {
                 frm.save('Update');
             }
         },__("Property Status"));
-
+        frm.add_custom_button(
+            __("Task"),
+            function () {
+                frappe.model.open_mapped_doc({
+                    method: "property_management.property_management.doc_events.asset.create_task",
+                    frm: cur_frm,
+                });
+            },
+            __("Create")
+        );
         if (frm.doc.docstatus == 1) {
             frm.page.set_inner_btn_group_as_primary(__("Create"));
             frm.add_custom_button(__("Tenancy"), function() {

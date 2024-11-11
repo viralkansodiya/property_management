@@ -120,7 +120,9 @@ doc_events = {
 	},
 
 	"Asset": {
-		"on_submit": "property_management.api.crud_event.rent_item"
+		"on_submit": "property_management.api.crud_event.rent_item",
+		"validate": "property_management.api.crud_event.validate",
+		"on_trace": "property_management.api.crud_event.on_trash"
 	},
 
 	"Property Owner": {
@@ -178,7 +180,7 @@ doc_events = {
 # generated from the base implementation of the doctype dashboard,
 # along with any modifications made in other Frappe apps
 # override_doctype_dashboards = {
-# 	"Task": "property_management.task.get_dashboard_data"
+# 	"Asset" : "property_management.property_management.doc_events.asset.get_dashboard_data",
 # }
 
 # exempt linked doctypes from being automatically cancelled

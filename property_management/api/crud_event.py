@@ -10,6 +10,7 @@ def rent_item(doc, event):
         new_rent_group.save()
 
     rent = frappe.db.get_list('Item',filters={'asset': doc.name},fields=['asset'],as_list=True)
+    
     if not rent:
         new_rent_item = frappe.get_doc(dict(
             doctype = 'Item',
@@ -21,6 +22,17 @@ def rent_item(doc, event):
             include_item_in_manufacturing = 0,
             is_fixed_asset = 0,
             is_rent_item = 1,
-            asset = doc.name
+            asset = doc.name,
+            gst_hsn_code = rent
         ))
         new_rent_item.save()
+
+def validate(self, method):
+    if not frappe.db.get_value("Item", self.item_code, "asset"):
+        frappe.db.set_value("Item", self.item_code, "asset", self.name)
+        frappe.db.set_value("Item", self.item_code, "asset_name", self.asset_name)
+
+def on_trash(self, method):
+    frappe.db.set_value("Item", self.item_code, "asset", "")
+    frappe.db.set_value("Item", self.item_code, "asset_name", "")
+
